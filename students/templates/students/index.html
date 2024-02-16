@@ -1,0 +1,116 @@
+{% extends "students/base.html" %}
+{% load static%}
+{% block body %}
+<div class="container-fluid">
+  <h3 m-4>Kaimosi Girls High</h3>
+  <div class="row">
+      <div class="col-12">
+       {% if students %}
+       <div class="card border-success mb-3 ms-4 me-4" >
+        <div class="card-header " >
+          <i class="fa-solid fa-list fa-lg"></i>&nbsp;&nbsp;Student Records
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead style="border-bottom: green 1px groove">
+                  <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Admn No.</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                   {% for student in students %}
+                   <tr class="table-default">
+                    <td> 
+                      <div style="text-align: left;">
+                          {% if student.profile_picture %}
+                              <img src="{{ student.profile_picture.url }}" style="width: 50px; height: 50px; border-radius: 7px;" alt="Profile Picture">
+                          {% else %}
+                              <img src="{%static '/media/default.jpg'%}" style="width: 50px; height: 50px; border-radius: 7px;" alt="Default Profile Picture">
+                          {% endif %}
+                      </div>
+                    </td>
+                   <td>{{student.first_name}}</td>
+                   <td>{{student.last_name}}</td>
+                   <td>{{student.adm_no}}</td>
+                   <td>
+                    <button type="button" class="btn btn-success me-1" href="{% url 'view_student' student.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{student.id}}"><i class="fa-solid fa-circle-info fa-dark"></i></button>
+                    <a href="{% url 'edit' student.id%}" class="btn btn-info me-1"><i class="fa-solid fa-file-pen fa-lg"></i></a>
+                 
+                  <button class="btn btn-danger me-1" data-bs-toggle="modal" data-bs-target="#delete{{student.id}}"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                    <!-- Modal view -->
+                    <div class="modal" id="myModal{{ student.id }}" tabindex="-1" aria-labelledby="myModalLabel{{ student.id }}" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title">
+                                      <b class="text-dark"> Student:</b>&nbsp;&nbsp;<span class="border-bottom">{{ student.first_name }} {{ student.last_name }}</span>
+                                  </h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true"></span>
+                                  </button>
+                              </div>
+                              <div class="modal-body">
+                                  <ul class="List-unstyle">
+                                      <li>Admn No: {{ student.adm_no }}</li>
+                                      <li>Name : {{ student.first_name }} {{ student.last_name }}</li>
+                                      <li>Form: </li>
+                                  </ul>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                    <div class="modal" id="delete{{student.id}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title text-info">
+                               Confirm &nbsp;<span class="border-bottom text-info"><b>deletion</b><i class="fa-solid fa-exclamation"></i></span>
+                              </h5> 
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true"></span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <h4>Are you sure you want to delete {{student.last_name}} ??  </h4>
+                          </div>
+                          <div class="modal-footer">                           
+                           <form action="{% url 'delete' student.id %}" method="POST">
+                            {% csrf_token%}
+                             <button  class="btn btn-danger"  >Delete</button>
+                            </form>
+                            <button  class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  </tr>
+                   {%endfor%}
+                </tbody>
+              </table>
+            </div>
+          </p>
+        </div>
+      </div>
+       {% else %}
+       <div class="alert alert-dismissible alert-info">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <i class="fa-regular fa-face-frown-open fa-lg"></i> There're no records yet!
+      </div>
+       {% endif %}
+      </div>
+  </div>
+  
+ </div>
+{% endblock %}

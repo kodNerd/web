@@ -1,0 +1,33 @@
+{% extends "students/base.html" %}
+{% load static %}
+
+{% block body %}
+<div class="container-fluid">
+  <h3 class="m-4 text-center">Update Student Details</h3>
+  <div class="row justify-content-center">
+    <div class="col-6">        
+      <div class="card bg-light mb-3">
+        <div class="card-header "><i class="fa-regular fa-pen-to-square fa-lg"></i> Update student details</div>
+        <div class="card-body md-flex">
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group" style="text-align: center;">
+              
+              {% if form.instance.profile_picture %}
+                <img src="{{ form.instance.profile_picture.url }}" style="width: 200px; height: 200px; border-radius: 50%" alt="Profile Picture">
+              {% else %}
+                <img src="{% static 'media/default.jpg' %}" style="width: 50px; height: 50px; border-radius: 7px;" alt="Default Profile Picture">
+              {% endif %}
+              
+            </div>
+            {{ form.as_p }}
+            
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{% url 'index' %}" class="btn btn-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
